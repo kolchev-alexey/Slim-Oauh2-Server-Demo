@@ -10,7 +10,7 @@ class UserConfirmed
 {
     public $id;
 
-    public function __construct(UserId $id)
+    public function __construct(string $id)
     {
         $this->id = $id;
     }

@@ -8,7 +8,6 @@ use Api\Http\Request\SignUpRequest;
 use Api\Http\ValidationException;
 use Api\Http\Validator\Validator;
 use Api\Model\Flusher;
-use Api\Model\User\Entity\User\Email;
 use Api\Model\User\Entity\User\User;
 use Api\Model\User\Entity\User\UserId;
 use Api\Model\User\Entity\User\UserRepository;
@@ -50,16 +49,14 @@ class RequestAction implements RequestHandlerInterface
             throw new ValidationException($errors);
         }
 
-        $email = new Email($command->email);
-
-        if ($this->users->hasByEmail($email)) {
+        if ($this->users->hasByEmail($command->email)) {
             throw new \DomainException('User with this email already exists.');
         }
 
         $user = new User(
             UserId::next(),
             new \DateTimeImmutable(),
-            $email,
+            $command->email,
             $this->hasher->hash($command->password),
             $token = $this->tokenizer->generate()
         );

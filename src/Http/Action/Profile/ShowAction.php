@@ -26,8 +26,8 @@ class ShowAction implements RequestHandlerInterface
         }
 
         return new JsonResponse([
-            'id' => $user->getId()->getId(),
-            'email' => $user->getEmail()->getEmail(),
+            'id' => $user->getId(),
+            'email' => $user->getEmail(),
         ]);
     }
 }

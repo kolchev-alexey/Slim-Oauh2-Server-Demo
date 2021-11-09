@@ -21,7 +21,7 @@ class CreatedListener
     {
         $message = (new \Swift_Message('Sign Up Confirmation'))
             ->setFrom($this->from)
-            ->setTo($event->email->getEmail())
+            ->setTo($event->email)
             ->setBody('Token: ' . $event->confirmToken->getToken())
         ;
 

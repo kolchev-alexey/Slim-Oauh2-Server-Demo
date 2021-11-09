@@ -17,9 +17,9 @@ class UserId
         $this->id = $id;
     }
 
-    public static function next(): self
+    public static function next(): string
     {
-        return new self(Uuid::uuid4()->toString());
+        return Uuid::uuid4()->toString();
     }
 
     public function getId(): string

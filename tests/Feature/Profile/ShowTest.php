@@ -37,8 +37,8 @@ class ShowTest extends WebTestCase
         $data = json_decode($content, true);
 
         self::assertEquals([
-            'id' => $fixture->getUser()->getId()->getId(),
-            'email' => $fixture->getUser()->getEmail()->getEmail(),
+            'id' => $fixture->getUser()->getId(),
+            'email' => $fixture->getUser()->getEmail(),
         ], $data);
     }
 

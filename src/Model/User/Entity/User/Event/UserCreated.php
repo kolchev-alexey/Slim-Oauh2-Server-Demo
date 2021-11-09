@@ -14,7 +14,7 @@ class UserCreated
     public $email;
     public $confirmToken;
 
-    public function __construct(UserId $id, Email $email, ConfirmToken $confirmToken)
+    public function __construct(string $id, string $email, ConfirmToken $confirmToken)
     {
         $this->id = $id;
         $this->email = $email;

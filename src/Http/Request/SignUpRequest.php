@@ -21,7 +21,7 @@ class SignUpRequest
 
     public function __construct($body)
     {
-        $this->email = $body['email'] ?? '';
+        $this->email = mb_strtolower($body['email'] ?? '');
         $this->password = $body['password'] ?? '';
     }
 }

@@ -24,19 +24,19 @@ class DoctrineUserRepository implements UserRepository
         $this->em = $em;
     }
 
-    public function hasByEmail(Email $email): bool
+    public function hasByEmail(string $email): bool
     {
         return $this->repo->createQueryBuilder('t')
             ->select('COUNT(t.id)')
             ->andWhere('t.email = :email')
-            ->setParameter(':email', $email->getEmail())
+            ->setParameter(':email', $email)
             ->getQuery()->getSingleScalarResult() > 0;
     }
 
-    public function getByEmail(Email $email): User
+    public function getByEmail(string $email): User
     {
         /** @var User $user */
-        if (!$user = $this->repo->findOneBy(['email' => $email->getEmail()])) {
+        if (!$user = $this->repo->findOneBy(['email' => $email])) {
             throw new EntityNotFoundException('User is not found.');
         }
         return $user;

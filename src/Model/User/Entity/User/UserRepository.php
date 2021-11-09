@@ -6,9 +6,9 @@ namespace Api\Model\User\Entity\User;
 
 interface UserRepository
 {
-    public function hasByEmail(Email $email): bool;
+    public function hasByEmail(string $email): bool;
 
-    public function getByEmail(Email $email): User;
+    public function getByEmail(string $email): User;
 
     public function add(User $user): void;
 }

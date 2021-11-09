@@ -25,36 +25,41 @@ class User implements AggregateRoot
     private const STATUS_ACTIVE = 'active';
 
     /**
-     * @ORM\Column(type="user_user_id")
      * @ORM\Id
+     * @ORM\Column(type="string", unique=true)
      */
     private $id;
+
     /**
      * @ORM\Column(type="datetime_immutable")
      */
     private $date;
+
     /**
-     * @ORM\Column(type="user_user_email")
+     * @ORM\Column(type="string", nullable=false, unique=true)
      */
     private $email;
+
     /**
      * @ORM\Column(type="string", name="password_hash")
      */
     private $passwordHash;
+
     /**
      * @var ConfirmToken
      * @ORM\Embedded(class="ConfirmToken", columnPrefix="confirm_token_")
      */
     private $confirmToken;
+
     /**
      * @ORM\Column(type="string", length=16)
      */
     private $status;
 
     public function __construct(
-        UserId $id,
+        string $id,
         \DateTimeImmutable $date,
-        Email $email,
+        string $email,
         string $hash,
         ConfirmToken $confirmToken
     )
@@ -89,7 +94,7 @@ class User implements AggregateRoot
         return $this->status === self::STATUS_ACTIVE;
     }
 
-    public function getId(): UserId
+    public function getId(): string
     {
         return $this->id;
     }
@@ -99,7 +104,7 @@ class User implements AggregateRoot
         return $this->date;
     }
 
-    public function getEmail(): Email
+    public function getEmail(): string
     {
         return $this->email;
     }

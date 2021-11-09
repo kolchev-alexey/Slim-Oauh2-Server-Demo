@@ -11,7 +11,7 @@ use Psr\Container\ContainerInterface;
 
 return [
     EntityManagerInterface::class => function (ContainerInterface $container) {
-        $params = $container['config']['doctrine'];
+        $params = $container->get('config')['doctrine'];
         $config = Setup::createAnnotationMetadataConfiguration(
             $params['metadata_dirs'],
             $params['dev_mode'],
@@ -40,6 +40,8 @@ return [
             ],
             'connection' => [
                 'url' => getenv('API_DB_URL'),
+                // 'driver' => 'pdo_sqlite',
+                // 'path' => 'var/database.sqlite'
             ],
             'types' => [
                 Type\User\UserIdType::NAME => Type\User\UserIdType::class,

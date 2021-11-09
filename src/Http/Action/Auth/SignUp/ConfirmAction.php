@@ -8,7 +8,6 @@ use Api\Http\Request\ConfirmRequest;
 use Api\Http\ValidationException;
 use Api\Http\Validator\Validator;
 use Api\Model\Flusher;
-use Api\Model\User\Entity\User\Email;
 use Api\Model\User\Entity\User\UserRepository;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -36,7 +35,7 @@ class ConfirmAction implements RequestHandlerInterface
             throw new ValidationException($errors);
         }
 
-        $user = $this->users->getByEmail(new Email($command->email));
+        $user = $this->users->getByEmail($command->email);
 
         $user->confirmSignup($command->token, new \DateTimeImmutable());
 

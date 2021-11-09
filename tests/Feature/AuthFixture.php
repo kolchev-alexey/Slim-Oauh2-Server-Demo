@@ -23,7 +23,7 @@ class AuthFixture extends AbstractFixture
     {
         $user = (new UserBuilder())
             ->withDate($now = new \DateTimeImmutable())
-            ->withEmail(new Email('test@example.com'))
+            ->withEmail('test@example.com')
             ->withConfirmToken(new ConfirmToken($token = 'token', $now->modify('+1 day')))
             ->build();
 
@@ -35,7 +35,7 @@ class AuthFixture extends AbstractFixture
 
         $token = new AccessTokenEntity();
         $token->setIdentifier(bin2hex(random_bytes(40)));
-        $token->setUserIdentifier($user->getId()->getId());
+        $token->setUserIdentifier($user->getId());
         $token->setExpiryDateTime(new \DateTime('+1 hour'));
         $token->setClient(new ClientEntity('app'));
         $token->addScope(new ScopeEntity('common'));

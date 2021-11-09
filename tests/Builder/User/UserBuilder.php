@@ -21,12 +21,12 @@ class UserBuilder
     {
         $this->id = UserId::next();
         $this->date = new \DateTimeImmutable();
-        $this->email = new Email('mail@example.com');
+        $this->email = 'mail@example.com';
         $this->hash = 'hash';
         $this->confirmToken = new ConfirmToken('token', new \DateTimeImmutable('+1 day'));
     }
 
-    public function withId(UserId $id): self
+    public function withId(string $id): self
     {
         $clone = clone $this;
         $clone->id = $id;
@@ -40,10 +40,10 @@ class UserBuilder
         return $clone;
     }
 
-    public function withEmail(Email $email): self
+    public function withEmail(string $email): self
     {
         $clone = clone $this;
-        $clone->email = $email;
+        $clone->email = (new Email($email))->getEmail();
         return $clone;
     }
 

@@ -37,7 +37,7 @@ class UserRepository implements UserRepositoryInterface
             if (!$this->hasher->validate($password, $user->getPasswordHash())) {
                 return null;
             }
-            return new UserEntity($user->getId()->getId());
+            return new UserEntity($user->getId());
         }
         return  null;
     }

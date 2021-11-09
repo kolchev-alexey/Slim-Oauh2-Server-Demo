@@ -16,7 +16,7 @@ class RequestFixture extends AbstractFixture
     {
         $user = (new UserBuilder())
             ->withDate($now = new \DateTimeImmutable())
-            ->withEmail(new Email('test@example.com'))
+            ->withEmail('test@example.com')
             ->withConfirmToken(new ConfirmToken($token = 'token', $now->modify('+1 day')))
             ->build();
 

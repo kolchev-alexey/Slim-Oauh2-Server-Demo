@@ -17,7 +17,7 @@ class SignUpTest extends TestCase
         $user = new User(
             $id = UserId::next(),
             $date = new \DateTimeImmutable(),
-            $email = new Email('mail@example.com'),
+            $email = 'mail@example.com',
             $hash = 'hash',
             $token = new ConfirmToken('token', new \DateTimeImmutable('+1 day'))
         );
