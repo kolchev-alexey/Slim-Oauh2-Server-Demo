@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Api\Model\User\UseCase\SignUp\Request;
+namespace Api\Http\Request;
 
 use Symfony\Component\Validator\Constraints as Assert;
 
-class Command
+class SignUpRequest
 {
     /**
      * @Assert\NotBlank()
@@ -18,4 +18,10 @@ class Command
      * @Assert\Length(min=6)
      */
     public $password;
+
+    public function __construct($body)
+    {
+        $this->email = $body['email'] ?? '';
+        $this->password = $body['password'] ?? '';
+    }
 }

@@ -65,7 +65,7 @@ class User implements AggregateRoot
         $this->passwordHash = $hash;
         $this->confirmToken = $confirmToken;
         $this->status = self::STATUS_WAIT;
-        $this->recordEvent(new UserCreated($this->id, $this->email, $this->confirmToken));
+        // $this->recordEvent(new UserCreated($this->id, $this->email, $this->confirmToken));
     }
 
     public function confirmSignup(string $token, \DateTimeImmutable $date): void
@@ -76,7 +76,7 @@ class User implements AggregateRoot
         $this->confirmToken->validate($token, $date);
         $this->status = self::STATUS_ACTIVE;
         $this->confirmToken = null;
-        $this->recordEvent(new UserConfirmed($this->id));
+        // $this->recordEvent(new UserConfirmed($this->id));
     }
 
     public function isWait(): bool

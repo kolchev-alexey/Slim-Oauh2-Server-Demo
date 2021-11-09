@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace Api\Http\Action\Auth\SignUp;
 
+use Api\Http\Request\ConfirmRequest;
 use Api\Http\ValidationException;
 use Api\Http\Validator\Validator;
-use Api\Model\User\UseCase\SignUp\Confirm\Command;
-use Api\Model\User\UseCase\SignUp\Confirm\Handler;
+use Api\Model\Flusher;
+use Api\Model\User\Entity\User\Email;
+use Api\Model\User\Entity\User\UserRepository;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
@@ -15,37 +17,32 @@ use Zend\Diactoros\Response\JsonResponse;
 
 class ConfirmAction implements RequestHandlerInterface
 {
-    private $handler;
     private $validator;
+    private $users;
+    private $flusher;
 
-    public function __construct(Handler $handler, Validator $validator)
+    public function __construct(Validator $validator, UserRepository $users, Flusher $flusher)
     {
-        $this->handler = $handler;
         $this->validator = $validator;
+        $this->users = $users;
+        $this->flusher = $flusher;
     }
 
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
-        $command = $this->deserialize($request);
+        $command = new ConfirmRequest($request->getParsedBody());
 
         if ($errors = $this->validator->validate($command)) {
             throw new ValidationException($errors);
         }
 
-        $this->handler->handle($command);
+        $user = $this->users->getByEmail(new Email($command->email));
+
+        $user->confirmSignup($command->token, new \DateTimeImmutable());
+
+        $this->flusher->flush($user);
 
         return new JsonResponse([]);
     }
 
-    private function deserialize(ServerRequestInterface $request): Command
-    {
-        $body = $request->getParsedBody();
-
-        $command = new Command();
-
-        $command->email = $body['email'] ?? '';
-        $command->token = $body['token'] ?? '';
-
-        return $command;
-    }
 }
