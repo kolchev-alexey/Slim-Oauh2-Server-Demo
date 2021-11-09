@@ -71,38 +71,4 @@ return [
         );
     },
 
-    Action\Author\ShowAction::class => function (ContainerInterface $container) {
-        return new Action\Author\ShowAction(
-            $container->get(ReadModel\Video\AuthorReadRepository::class)
-        );
-    },
-
-    Action\Author\CreateAction::class => function (ContainerInterface $container) {
-        return new Action\Author\CreateAction(
-            $container->get(Model\Video\UseCase\Author\Create\Handler::class),
-            $container->get(Validator::class)
-        );
-    },
-
-    Action\Author\Video\IndexAction::class => function (ContainerInterface $container) {
-        return new Action\Author\Video\IndexAction(
-            $container->get(ReadModel\Video\AuthorReadRepository::class),
-            $container->get(ReadModel\Video\VideoReadRepository::class),
-            $container->get(VideoUrl::class)
-        );
-    },
-
-    Action\Author\Video\CreateAction::class => function (ContainerInterface $container) {
-        return new Action\Author\Video\CreateAction(
-            $container->get(Model\Video\UseCase\Video\Create\Handler::class),
-            $container->get(Validator::class)
-        );
-    },
-
-    Action\Author\Video\ShowAction::class => function (ContainerInterface $container) {
-        return new Action\Author\Video\ShowAction(
-            $container->get(ReadModel\Video\VideoReadRepository::class),
-            $container->get(VideoUrl::class)
-        );
-    },
 ];
