@@ -12,4 +12,7 @@ $aggregator = new ConfigAggregator([
 
 $config = $aggregator->getMergedConfig();
 
-return new \Slim\Container($config);
+$builder = new \DI\ContainerBuilder();
+$builder->addDefinitions($config);
+
+return $builder->build();

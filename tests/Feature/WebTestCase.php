@@ -13,10 +13,11 @@ use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Slim\App;
-use Zend\Diactoros\Response;
-use Zend\Diactoros\ServerRequest;
-use Zend\Diactoros\Stream;
-use Zend\Diactoros\Uri;
+use Slim\Factory\AppFactory;
+use Laminas\Diactoros\Response;
+use Laminas\Diactoros\ServerRequest;
+use Laminas\Diactoros\Stream;
+use Laminas\Diactoros\Uri;
 
 class WebTestCase extends TestCase
 {
@@ -54,7 +55,7 @@ class WebTestCase extends TestCase
 
     protected function request(ServerRequestInterface $request): ResponseInterface
     {
-        $response = $this->app()->process($request, new Response());
+        $response = $this->app()->handle($request);
         $response->getBody()->rewind();
         return $response;
     }
@@ -88,7 +89,7 @@ class WebTestCase extends TestCase
     private function app(): App
     {
         $container = $this->container();
-        $app = new App($container);
+        $app = AppFactory::createFromContainer($container);
         (require 'config/routes.php')($app, $container);
         return $app;
     }

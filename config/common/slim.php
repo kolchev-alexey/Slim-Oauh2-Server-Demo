@@ -6,5 +6,7 @@ return [
     'settings' => [
         'addContentLengthHeader' => false,
         'displayErrorDetails' => (bool)getenv('API_DEBUG'),
+        'logErrors' => true,
+        'logErrorDetails' => true,
     ],
 ];

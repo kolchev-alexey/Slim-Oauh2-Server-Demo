@@ -4,18 +4,25 @@ declare(strict_types=1);
 
 use Api\Http\Action;
 use Api\Http\Middleware;
-use Api\Infrastructure\Framework\Middleware\CallableMiddlewareAdapter as CM;
-use League\OAuth2\Server\Middleware\ResourceServerMiddleware;
 use Psr\Container\ContainerInterface;
+use Slim\Routing\RouteCollectorProxy;
 use Slim\App;
 
 return function (App $app, ContainerInterface $container) {
 
-    $app->add(new CM($container, Middleware\BodyParamsMiddleware::class));
-    $app->add(new CM($container, Middleware\DomainExceptionMiddleware::class));
-    $app->add(new CM($container, Middleware\ValidationExceptionMiddleware::class));
+    $app->addRoutingMiddleware();
 
-    $auth = $container->get(ResourceServerMiddleware::class);
+    $app->add(Middleware\DomainExceptionMiddleware::class);
+    $app->add(Middleware\ValidationExceptionMiddleware::class);
+    $app->addBodyParsingMiddleware();
+
+    // $errorMiddleware = $app->addErrorMiddleware(true, true, true);
+    $settings = $container->get('settings');
+    $app->addErrorMiddleware(
+        $settings['displayErrorDetails'],
+        $settings['logErrors'],
+        $settings['logErrorDetails']
+    );
 
     $app->get('/', Action\HomeAction::class . ':handle');
 
@@ -24,8 +31,8 @@ return function (App $app, ContainerInterface $container) {
 
     $app->post('/oauth/auth', Action\Auth\OAuthAction::class . ':handle');
 
-    $app->group('/profile', function () {
-        $this->get('', Action\Profile\ShowAction::class . ':handle');
-    })->add($auth);
+    $app->group('/profile', function (RouteCollectorProxy $group) {
+        $group->get('', Action\Profile\ShowAction::class . ':handle');
+    })->add(Middleware\AuthenticateMiddleware::class);
 
 };

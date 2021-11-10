@@ -7,8 +7,26 @@ use Doctrine\ORM\EntityManagerInterface;
 use League\OAuth2\Server;
 use Api\Infrastructure\Model\OAuth as Infrastructure;
 use Psr\Container\ContainerInterface;
+use Psr\Http\Message\ResponseFactoryInterface;
+use Slim\App;
+use Slim\Factory\AppFactory;
 
 return [
+    ResponseFactoryInterface::class => function (ContainerInterface $container) {
+        return $container->get(App::class)->getResponseFactory();
+    },
+    App::class => function (ContainerInterface $container) {
+        AppFactory::setContainer($container);
+
+        return AppFactory::create();
+    },
+    Middleware\AuthenticateMiddleware::class => function (ContainerInterface $container)
+    {
+        return new Middleware\AuthenticateMiddleware(
+            $container->get(Server\ResourceServer::class),
+            $container->get(ResponseFactoryInterface::class)
+        );
+    },
     Server\AuthorizationServer::class => function (ContainerInterface $container)
     {
         $config = $container->get('config')['oauth'];
